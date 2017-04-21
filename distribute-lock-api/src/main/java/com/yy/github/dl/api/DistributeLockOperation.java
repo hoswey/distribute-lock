@@ -1,4 +1,4 @@
-package com.github.dl.api;
+package com.yy.github.dl.api;
 
 import java.util.concurrent.TimeUnit;
 

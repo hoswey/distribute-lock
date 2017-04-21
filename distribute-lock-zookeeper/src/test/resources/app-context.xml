@@ -16,7 +16,7 @@
     <constructor-arg name="retryPolicy" ref="retryPolicy"/>
   </bean>
 
-  <bean id="zkDistributeLockTemplate" class="com.github.dl.zk.ZkDistributeLockOperation">
+  <bean id="zkDistributeLockTemplate" class="com.yy.github.dl.zk.ZkDistributeLockOperation">
     <constructor-arg name="curatorFramework" ref="curatorFramework"/>
     <constructor-arg name="namespace" value="weibo"/>
   </bean>

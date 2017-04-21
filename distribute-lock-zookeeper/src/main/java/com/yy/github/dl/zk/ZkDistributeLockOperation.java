@@ -1,7 +1,7 @@
-package com.github.dl.zk;
+package com.yy.github.dl.zk;
 
-import com.github.dl.api.DistributeLockOperation;
-import com.github.dl.api.PostLockCallBack;
+import com.yy.github.dl.api.DistributeLockOperation;
+import com.yy.github.dl.api.PostLockCallBack;
 import java.util.concurrent.TimeUnit;
 import org.apache.curator.framework.CuratorFramework;
 

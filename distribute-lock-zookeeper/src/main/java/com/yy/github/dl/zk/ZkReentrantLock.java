@@ -1,7 +1,7 @@
-package com.github.dl.zk;
+package com.yy.github.dl.zk;
 
-import com.github.dl.api.DistributeLock;
-import com.github.dl.api.LockException;
+import com.yy.github.dl.api.DistributeLock;
+import com.yy.github.dl.api.LockException;
 import java.util.concurrent.TimeUnit;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.recipes.locks.InterProcessMutex;

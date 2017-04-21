@@ -1,4 +1,4 @@
-package com.github.dl.api;
+package com.yy.github.dl.api;
 
 /**
  * Created by hongshuwei on 6/13/16.

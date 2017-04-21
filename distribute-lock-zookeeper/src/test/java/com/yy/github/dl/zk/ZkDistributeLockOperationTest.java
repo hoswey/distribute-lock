@@ -1,9 +1,9 @@
-package com.github.dl.zk;
+package com.yy.github.dl.zk;
 
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.spy;
 
-import com.github.dl.api.PostLockCallBack;
+import com.yy.github.dl.api.PostLockCallBack;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;

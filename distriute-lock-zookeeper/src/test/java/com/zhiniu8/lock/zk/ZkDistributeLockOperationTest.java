@@ -1,17 +1,16 @@
 package com.zhiniu8.lock.zk;
 
+import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.spy;
+
 import com.zhiniu8.lock.PostLockCallBack;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InOrder;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
-
-import static org.mockito.Mockito.inOrder;
-import static org.mockito.Mockito.spy;
 
 /**
  * Created by hongshuwei on 6/13/16.

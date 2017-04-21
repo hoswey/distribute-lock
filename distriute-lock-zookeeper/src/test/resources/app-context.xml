@@ -11,7 +11,7 @@
     <bean id="curatorFramework" class="org.apache.curator.framework.CuratorFrameworkFactory" init-method="start"
           destroy-method="close"
           factory-method="newClient">
-        <constructor-arg name="connectString" value="150.138.202.17:2181,150.138.202.18:2181,61.160.35.71:2181"/>
+        <constructor-arg name="connectString" value=""/>
         <constructor-arg name="retryPolicy" ref="retryPolicy"/>
     </bean>
 

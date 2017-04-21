@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="retryPolicy" class="org.apache.curator.retry.RetryOneTime">
+        <constructor-arg name="sleepMsBetweenRetry" value="5000"/>
+    </bean>
+
+    <bean id="curatorFramework" class="org.apache.curator.framework.CuratorFrameworkFactory" init-method="start"
+          destroy-method="close"
+          factory-method="newClient">
+        <constructor-arg name="connectString" value="150.138.202.17:2181,150.138.202.18:2181,61.160.35.71:2181"/>
+        <constructor-arg name="retryPolicy" ref="retryPolicy"/>
+    </bean>
+
+    <bean id="zkDistributeLockTemplate" class="com.zhiniu8.lock.zk.ZkDistributeLockOperation">
+        <constructor-arg name="curatorFramework" ref="curatorFramework"/>
+        <constructor-arg name="namespace" value="weibo"/>
+    </bean>
+</beans>

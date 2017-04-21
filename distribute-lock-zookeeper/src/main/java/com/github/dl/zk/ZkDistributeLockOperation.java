@@ -1,10 +1,9 @@
-package com.zhiniu8.lock.zk;
+package com.github.dl.zk;
 
-import com.zhiniu8.lock.DistributeLockOperation;
-import com.zhiniu8.lock.PostLockCallBack;
-import org.apache.curator.framework.CuratorFramework;
-
+import com.github.dl.api.DistributeLockOperation;
+import com.github.dl.api.PostLockCallBack;
 import java.util.concurrent.TimeUnit;
+import org.apache.curator.framework.CuratorFramework;
 
 /**
  * Created by hongshuwei on 6/13/16.
@@ -28,12 +27,12 @@ public class ZkDistributeLockOperation implements DistributeLockOperation {
         this.curatorFramework = curatorFramework;
     }
 
-    public void executeExclusive(String lockId, PostLockCallBack postLockCallBack) {
+    public void tryLockAndExecute(String lockId, PostLockCallBack postLockCallBack) {
 
-        execute(lockId, 1, TimeUnit.MILLISECONDS, postLockCallBack);
+        tryLockAndExecute(lockId, 1, TimeUnit.MILLISECONDS, postLockCallBack);
     }
 
-    public void execute(String lockId, long time, TimeUnit timeUnit, PostLockCallBack postLockCallBack) {
+    public void tryLockAndExecute(String lockId, long time, TimeUnit timeUnit, PostLockCallBack postLockCallBack) {
 
         ZkReentrantLock zkReentrantLock = new ZkReentrantLock(curatorFramework, namespace, lockId);
         boolean isLocked = zkReentrantLock.tryLock(time, timeUnit);

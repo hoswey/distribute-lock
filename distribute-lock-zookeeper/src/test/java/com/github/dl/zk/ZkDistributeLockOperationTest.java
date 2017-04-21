@@ -1,9 +1,9 @@
-package com.zhiniu8.lock.zk;
+package com.github.dl.zk;
 
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.spy;
 
-import com.zhiniu8.lock.PostLockCallBack;
+import com.github.dl.api.PostLockCallBack;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -34,7 +34,7 @@ public class ZkDistributeLockOperationTest extends StdOutTest {
         GetLockTask task2 = spy(new GetLockTask("Task 2", 10000));
 
         executeService.submit(task1);
-        // Let task1 execute first
+        // Let task1 tryLockAndExecute first
         Thread.sleep(500);
         executeService.submit(task2);
 
@@ -45,7 +45,7 @@ public class ZkDistributeLockOperationTest extends StdOutTest {
             System.out.println("Error waiting for ExecutorService shutdown");
         }
         // Write operation will hold the write lock 3000 milliseconds, so here we verify that when two
-        // writer execute concurrently, the second writer can only writes only when the first one is
+        // writer tryLockAndExecute concurrently, the second writer can only writes only when the first one is
         // finished.
         final InOrder inOrder = inOrder(getStdOutMock());
         inOrder.verify(getStdOutMock())
@@ -68,7 +68,7 @@ public class ZkDistributeLockOperationTest extends StdOutTest {
         GetLockTask task2 = spy(new GetLockTask("Task 2", 1));
 
         executeService.submit(task1);
-        // Let task1 execute first
+        // Let task1 tryLockAndExecute first
         Thread.sleep(500);
         executeService.submit(task2);
 
@@ -79,7 +79,7 @@ public class ZkDistributeLockOperationTest extends StdOutTest {
             System.out.println("Error waiting for ExecutorService shutdown");
         }
         // Write operation will hold the write lock 3000 milliseconds, so here we verify that when two
-        // writer execute concurrently, the second writer will lock as it only try in 1 mill seconds while
+        // writer tryLockAndExecute concurrently, the second writer will lock as it only try in 1 mill seconds while
         // the first hold the lock 3 seconds
         final InOrder inOrder = inOrder(getStdOutMock());
         inOrder.verify(getStdOutMock())
@@ -103,7 +103,7 @@ public class ZkDistributeLockOperationTest extends StdOutTest {
 
         public void run() {
 
-            zkDistributeLockOperation.execute("lockForTest", timeoutMills, TimeUnit.MILLISECONDS,
+            zkDistributeLockOperation.tryLockAndExecute("lockForTest", timeoutMills, TimeUnit.MILLISECONDS,
                     new PostLockCallBack() {
 
                         public void onLockAcquired() {

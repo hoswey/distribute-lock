@@ -1,18 +1,19 @@
-package com.zhiniu8.lock.zk;
+package com.github.dl.zk;
 
-import com.zhiniu8.lock.DistributeLock;
-import com.zhiniu8.lock.LockException;
+import com.github.dl.api.DistributeLock;
+import com.github.dl.api.LockException;
+import java.util.concurrent.TimeUnit;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.recipes.locks.InterProcessMutex;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.concurrent.TimeUnit;
+;
 
 /**
  * Created by hongshuwei on 6/13/16.
  */
-public class ZkReentrantLock implements DistributeLock {
+public class ZkReentrantLock implements DistributeLock  {
 
     private Logger log = LoggerFactory.getLogger(this.getClass());
 

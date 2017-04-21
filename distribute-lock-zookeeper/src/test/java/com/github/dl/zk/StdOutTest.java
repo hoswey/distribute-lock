@@ -1,4 +1,4 @@
-package com.zhiniu8.lock.zk;
+package com.github.dl.zk;
 
 /**
  * Created by hongshuwei on 6/13/16.

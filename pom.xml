@@ -10,7 +10,8 @@
   <packaging>pom</packaging>
 
   <modules>
-    <module>distriute-lock-zookeeper</module>
+    <module>distribute-lock-zookeeper</module>
+    <module>distribute-lock-api</module>
   </modules>
 
   <dependencies>

@@ -5,8 +5,8 @@ package com.github.dl.api;
  */
 public abstract class PostLockAcquiredCallBack implements PostLockCallBack {
 
-    //Do nothing
-    public void onLockTimeout() {
+  //Do nothing
+  public void onLockTimeout() {
 
-    }
+  }
 }

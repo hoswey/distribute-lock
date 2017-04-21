@@ -1,22 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans
 		http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <bean id="retryPolicy" class="org.apache.curator.retry.RetryOneTime">
-        <constructor-arg name="sleepMsBetweenRetry" value="5000"/>
-    </bean>
+  <bean id="retryPolicy" class="org.apache.curator.retry.RetryOneTime">
+    <constructor-arg name="sleepMsBetweenRetry" value="5000"/>
+  </bean>
 
-    <bean id="curatorFramework" class="org.apache.curator.framework.CuratorFrameworkFactory" init-method="start"
-          destroy-method="close"
-          factory-method="newClient">
-        <constructor-arg name="connectString" value=""/>
-        <constructor-arg name="retryPolicy" ref="retryPolicy"/>
-    </bean>
+  <bean id="curatorFramework" class="org.apache.curator.framework.CuratorFrameworkFactory"
+    init-method="start"
+    destroy-method="close"
+    factory-method="newClient">
+    <constructor-arg name="connectString" value=""/>
+    <constructor-arg name="retryPolicy" ref="retryPolicy"/>
+  </bean>
 
-    <bean id="zkDistributeLockTemplate" class="com.github.dl.zk.ZkDistributeLockOperation">
-        <constructor-arg name="curatorFramework" ref="curatorFramework"/>
-        <constructor-arg name="namespace" value="weibo"/>
-    </bean>
+  <bean id="zkDistributeLockTemplate" class="com.github.dl.zk.ZkDistributeLockOperation">
+    <constructor-arg name="curatorFramework" ref="curatorFramework"/>
+    <constructor-arg name="namespace" value="weibo"/>
+  </bean>
 </beans>

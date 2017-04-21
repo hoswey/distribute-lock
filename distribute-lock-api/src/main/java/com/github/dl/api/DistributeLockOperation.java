@@ -7,8 +7,9 @@ import java.util.concurrent.TimeUnit;
  */
 public interface DistributeLockOperation {
 
-    void tryLockAndExecute(String lockId, PostLockCallBack postLockCallBack);
+  void tryLockAndExecute(String lockId, PostLockCallBack postLockCallBack);
 
-    void tryLockAndExecute(String lockId, long time, TimeUnit timeUnit, PostLockCallBack postLockCallBack);
+  void tryLockAndExecute(String lockId, long time, TimeUnit timeUnit,
+      PostLockCallBack postLockCallBack);
 
 }

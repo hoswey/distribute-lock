@@ -5,15 +5,15 @@ package com.github.dl.api;
  */
 public interface PostLockCallBack {
 
-    /**
-     * callback when the lock is acquired
-     */
-    void onLockAcquired();
+  /**
+   * callback when the lock is acquired
+   */
+  void onLockAcquired();
 
-    /**
-     * call back when it unable to get the lock in the provided timeout, pls note that this is cause as
-     * another thread own this thread, not the timeout to connect to the zk
-     */
-    void onLockTimeout();
+  /**
+   * call back when it unable to get the lock in the provided timeout, pls note that this is cause
+   * as another thread own this thread, not the timeout to connect to the zk
+   */
+  void onLockTimeout();
 
 }

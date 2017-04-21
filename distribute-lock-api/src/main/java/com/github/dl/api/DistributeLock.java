@@ -7,11 +7,11 @@ import java.util.concurrent.TimeUnit;
  */
 public interface DistributeLock {
 
-    void lock();
+  void lock();
 
-    boolean tryLock();
+  boolean tryLock();
 
-    boolean tryLock(long timeout, TimeUnit timeUnit);
+  boolean tryLock(long timeout, TimeUnit timeUnit);
 
-    void unlock();
+  void unlock();
 }

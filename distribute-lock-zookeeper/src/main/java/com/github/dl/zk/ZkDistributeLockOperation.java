@@ -10,40 +10,41 @@ import org.apache.curator.framework.CuratorFramework;
  */
 public class ZkDistributeLockOperation implements DistributeLockOperation {
 
-    private String namespace;
+  private String namespace;
 
-    public CuratorFramework curatorFramework;
+  public CuratorFramework curatorFramework;
 
-    public CuratorFramework getCuratorFramework() {
-        return curatorFramework;
+  public CuratorFramework getCuratorFramework() {
+    return curatorFramework;
+  }
+
+  public void setCuratorFramework(CuratorFramework curatorFramework) {
+    this.curatorFramework = curatorFramework;
+  }
+
+  public ZkDistributeLockOperation(String namespace, CuratorFramework curatorFramework) {
+    this.namespace = namespace;
+    this.curatorFramework = curatorFramework;
+  }
+
+  public void tryLockAndExecute(String lockId, PostLockCallBack postLockCallBack) {
+
+    tryLockAndExecute(lockId, 1, TimeUnit.MILLISECONDS, postLockCallBack);
+  }
+
+  public void tryLockAndExecute(String lockId, long time, TimeUnit timeUnit,
+      PostLockCallBack postLockCallBack) {
+
+    ZkReentrantLock zkReentrantLock = new ZkReentrantLock(curatorFramework, namespace, lockId);
+    boolean isLocked = zkReentrantLock.tryLock(time, timeUnit);
+    if (isLocked) {
+      try {
+        postLockCallBack.onLockAcquired();
+      } finally {
+        zkReentrantLock.unlock();
+      }
+    } else {
+      postLockCallBack.onLockTimeout();
     }
-
-    public void setCuratorFramework(CuratorFramework curatorFramework) {
-        this.curatorFramework = curatorFramework;
-    }
-
-    public ZkDistributeLockOperation(String namespace, CuratorFramework curatorFramework) {
-        this.namespace = namespace;
-        this.curatorFramework = curatorFramework;
-    }
-
-    public void tryLockAndExecute(String lockId, PostLockCallBack postLockCallBack) {
-
-        tryLockAndExecute(lockId, 1, TimeUnit.MILLISECONDS, postLockCallBack);
-    }
-
-    public void tryLockAndExecute(String lockId, long time, TimeUnit timeUnit, PostLockCallBack postLockCallBack) {
-
-        ZkReentrantLock zkReentrantLock = new ZkReentrantLock(curatorFramework, namespace, lockId);
-        boolean isLocked = zkReentrantLock.tryLock(time, timeUnit);
-        if (isLocked) {
-            try {
-                postLockCallBack.onLockAcquired();
-            } finally {
-                zkReentrantLock.unlock();
-            }
-        } else {
-            postLockCallBack.onLockTimeout();
-        }
-    }
+  }
 }

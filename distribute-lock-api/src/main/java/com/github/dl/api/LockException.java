@@ -5,11 +5,11 @@ package com.github.dl.api;
  */
 public class LockException extends RuntimeException {
 
-    public LockException(String message) {
-        super(message);
-    }
+  public LockException(String message) {
+    super(message);
+  }
 
-    public LockException(String message, Throwable cause) {
-        super(message, cause);
-    }
+  public LockException(String message, Throwable cause) {
+    super(message, cause);
+  }
 }

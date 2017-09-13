@@ -1,4 +1,4 @@
-package com.yy.github.dl.zk;
+package com.github.dl.zk;
 
 import com.yy.github.dl.api.DistributeLock;
 import com.yy.github.dl.api.LockException;
@@ -8,7 +8,6 @@ import org.apache.curator.framework.recipes.locks.InterProcessMutex;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-;
 
 /**
  * Created by hongshuwei on 6/13/16.

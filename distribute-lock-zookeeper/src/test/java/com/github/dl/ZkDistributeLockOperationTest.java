@@ -1,16 +1,21 @@
-package com.yy.github.dl.zk;
+package com.github.dl;
 
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.spy;
 
-import com.yy.github.dl.api.PostLockCallBack;
+import com.github.dl.zk.ZkDistributeLockOperation;
+import com.yy.github.dl.api.LockAcquiredCallBack;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
+import org.apache.curator.framework.CuratorFramework;
+import org.apache.curator.framework.CuratorFrameworkFactory;
+import org.apache.curator.retry.RetryOneTime;
+import org.apache.curator.test.TestingServer;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InOrder;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
  * Created by hongshuwei on 6/13/16.
@@ -19,11 +24,27 @@ public class ZkDistributeLockOperationTest extends StdOutTest {
 
   private ZkDistributeLockOperation zkDistributeLockOperation;
 
+  private TestingServer testingClient;
+
+  private CuratorFramework curatorFramework;
+
   @Before
   public void setup() throws Exception {
-    ClassPathXmlApplicationContext applicationContext = new ClassPathXmlApplicationContext(
-        "app-context.xml");
-    zkDistributeLockOperation = applicationContext.getBean(ZkDistributeLockOperation.class);
+
+    super.setUp();
+    testingClient = new TestingServer(4711);
+
+    curatorFramework =  CuratorFrameworkFactory.newClient("127.0.0.1:4711",
+      new RetryOneTime(500));
+    curatorFramework.start();
+    curatorFramework.blockUntilConnected();
+    zkDistributeLockOperation = new ZkDistributeLockOperation("test-ns", curatorFramework);
+  }
+
+  @After
+  public void tearDown() throws Exception {
+    super.tearDown();
+    testingClient.close();
   }
 
   @Test
@@ -35,7 +56,7 @@ public class ZkDistributeLockOperationTest extends StdOutTest {
     GetLockTask task2 = spy(new GetLockTask("Task 2", 10000));
 
     executeService.submit(task1);
-    // Let task1 tryLockAndExecute first
+    // Let task1 execute first
     Thread.sleep(500);
     executeService.submit(task2);
 
@@ -46,22 +67,22 @@ public class ZkDistributeLockOperationTest extends StdOutTest {
       System.out.println("Error waiting for ExecutorService shutdown");
     }
     // Write operation will hold the write lock 3000 milliseconds, so here we verify that when two
-    // writer tryLockAndExecute concurrently, the second writer can only writes only when the first one is
+    // writer execute concurrently, the second writer can only writes only when the first one is
     // finished.
     final InOrder inOrder = inOrder(getStdOutMock());
     inOrder.verify(getStdOutMock())
-        .println("Task 1 begin");
+      .println("Task 1 begin");
     inOrder.verify(getStdOutMock())
-        .println("Task 1 finish");
+      .println("Task 1 finish");
     inOrder.verify(getStdOutMock())
-        .println("Task 2 begin");
+      .println("Task 2 begin");
     inOrder.verify(getStdOutMock())
-        .println("Task 2 finish");
+      .println("Task 2 finish");
 
   }
 
   @Test
-  public void testExecuteLokTimeout() throws Exception {
+  public void testExecuteLockTimeout() throws Exception {
 
     ExecutorService executeService = Executors.newFixedThreadPool(2);
 
@@ -69,7 +90,7 @@ public class ZkDistributeLockOperationTest extends StdOutTest {
     GetLockTask task2 = spy(new GetLockTask("Task 2", 1));
 
     executeService.submit(task1);
-    // Let task1 tryLockAndExecute first
+    // Let task1 execute first
     Thread.sleep(500);
     executeService.submit(task2);
 
@@ -80,15 +101,15 @@ public class ZkDistributeLockOperationTest extends StdOutTest {
       System.out.println("Error waiting for ExecutorService shutdown");
     }
     // Write operation will hold the write lock 3000 milliseconds, so here we verify that when two
-    // writer tryLockAndExecute concurrently, the second writer will lock as it only try in 1 mill seconds while
+    // writer execute concurrently, the second writer will lock as it only try in 1 mill seconds while
     // the first hold the lock 3 seconds
     final InOrder inOrder = inOrder(getStdOutMock());
     inOrder.verify(getStdOutMock())
-        .println("Task 1 begin");
+      .println("Task 1 begin");
     inOrder.verify(getStdOutMock())
-        .println("Task 2 timeout");
+      .println("Task 2 timeout");
     inOrder.verify(getStdOutMock())
-        .println("Task 1 finish");
+      .println("Task 1 finish");
   }
 
   private class GetLockTask implements Runnable {
@@ -105,23 +126,19 @@ public class ZkDistributeLockOperationTest extends StdOutTest {
     public void run() {
 
       zkDistributeLockOperation
-          .tryLockAndExecute("lockForTest", timeoutMills, TimeUnit.MILLISECONDS,
-              new PostLockCallBack() {
+        .execute("lockForTest", timeoutMills, TimeUnit.MILLISECONDS,
+          new LockAcquiredCallBack() {
 
-                public void onLockAcquired() {
-                  try {
-                    System.out.println(name + " begin");
-                    Thread.sleep(3000);
-                    System.out.println(name + " finish");
-                  } catch (InterruptedException e) {
-                    e.printStackTrace();
-                  }
-                }
-
-                public void onLockTimeout() {
-                  System.out.println(name + " timeout");
-                }
-              });
+            public void onLockAcquired() {
+              try {
+                System.out.println(name + " begin");
+                Thread.sleep(1000);
+                System.out.println(name + " finish");
+              } catch (InterruptedException e) {
+                e.printStackTrace();
+              }
+            }
+          });
     }
   }
 }

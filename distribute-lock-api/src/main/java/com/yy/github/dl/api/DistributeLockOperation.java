@@ -7,9 +7,25 @@ import java.util.concurrent.TimeUnit;
  */
 public interface DistributeLockOperation {
 
-  void tryLockAndExecute(String lockId, PostLockCallBack postLockCallBack);
+  /**
+   * 阻塞等待锁
+   *
+   * @param lockId
+   * @param lockCallBack
+   */
+  void execute(String lockId, LockAcquiredCallBack lockCallBack);
 
-  void tryLockAndExecute(String lockId, long time, TimeUnit timeUnit,
-      PostLockCallBack postLockCallBack);
+  /**
+   *
+   * 指定超时的锁
+   *
+   * @param lockId
+   * @param time
+   * @param timeUnit
+   * @param postLockCallBack
+   * @return
+   */
+   void execute(String lockId, long time, TimeUnit timeUnit,
+      LockCallBack postLockCallBack);
 
 }

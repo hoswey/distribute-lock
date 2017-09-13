@@ -1,7 +1,8 @@
-package com.yy.github.dl.zk;
+package com.github.dl.zk;
 
 import com.yy.github.dl.api.DistributeLockOperation;
-import com.yy.github.dl.api.PostLockCallBack;
+import com.yy.github.dl.api.LockAcquiredCallBack;
+import com.yy.github.dl.api.LockCallBack;
 import java.util.concurrent.TimeUnit;
 import org.apache.curator.framework.CuratorFramework;
 
@@ -10,9 +11,13 @@ import org.apache.curator.framework.CuratorFramework;
  */
 public class ZkDistributeLockOperation implements DistributeLockOperation {
 
+  private CuratorFramework curatorFramework;
   private String namespace;
 
-  public CuratorFramework curatorFramework;
+  public ZkDistributeLockOperation(String namespace, CuratorFramework curatorFramework) {
+    this.namespace = namespace;
+    this.curatorFramework = curatorFramework;
+  }
 
   public CuratorFramework getCuratorFramework() {
     return curatorFramework;
@@ -22,18 +27,13 @@ public class ZkDistributeLockOperation implements DistributeLockOperation {
     this.curatorFramework = curatorFramework;
   }
 
-  public ZkDistributeLockOperation(String namespace, CuratorFramework curatorFramework) {
-    this.namespace = namespace;
-    this.curatorFramework = curatorFramework;
+  public void execute(String lockId, LockAcquiredCallBack lockCallBack) {
+
+    execute(lockId, 1, TimeUnit.MILLISECONDS, lockCallBack);
   }
 
-  public void tryLockAndExecute(String lockId, PostLockCallBack postLockCallBack) {
-
-    tryLockAndExecute(lockId, 1, TimeUnit.MILLISECONDS, postLockCallBack);
-  }
-
-  public void tryLockAndExecute(String lockId, long time, TimeUnit timeUnit,
-      PostLockCallBack postLockCallBack) {
+  public void execute(String lockId, long time, TimeUnit timeUnit,
+    LockCallBack postLockCallBack) {
 
     ZkReentrantLock zkReentrantLock = new ZkReentrantLock(curatorFramework, namespace, lockId);
     boolean isLocked = zkReentrantLock.tryLock(time, timeUnit);

@@ -3,7 +3,7 @@ package com.yy.github.dl.api;
 /**
  * Created by hongshuwei on 6/13/16.
  */
-public interface PostLockCallBack {
+public interface LockCallBack {
 
   /**
    * callback when the lock is acquired

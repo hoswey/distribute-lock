@@ -19,7 +19,7 @@
     init-method="start"
     destroy-method="close"
     factory-method="newClient">
-    <constructor-arg name="connectString" value=""/>
+    <constructor-arg name="connectString" value="${zk连接字符串}"/>
     <constructor-arg name="retryPolicy" ref="retryPolicy"/>
   </bean>
 
